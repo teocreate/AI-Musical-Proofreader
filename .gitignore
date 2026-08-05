@@ -1,7 +1,14 @@
 __pycache__/
 *.py[cod]
-.venv/
+
+# Virtual environments. The glob is deliberately broad: corpus tooling needs OMR engines whose
+# dependencies conflict with the application's (homr pins opencv < 5), so they live in sibling
+# environments such as .venv-homr — several hundred megabytes of ONNX weights that must never
+# reach the repository.
+.venv*/
 venv/
+env/
+
 *.egg-info/
 build/
 dist/
@@ -11,3 +18,10 @@ dist/
 .coverage
 htmlcov/
 .DS_Store
+
+# Real scan material and OMR output are referenced by manifest, never committed: the files are
+# large and their licensing varies per source.
+datasets/real/
+datasets/scans/
+*.pdf
+!docs/**/*.pdf
