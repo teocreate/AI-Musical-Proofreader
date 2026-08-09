@@ -19,9 +19,10 @@ dist/
 htmlcov/
 .DS_Store
 
-# Real scan material and OMR output are referenced by manifest, never committed: the files are
-# large and their licensing varies per source.
-datasets/real/
+# Scan material whose licensing has not been established stays out. Evaluation cases that are
+# public domain and contributed deliberately are committed, scan included — the numbers in the
+# README are worth nothing if nobody else can reproduce them.
 datasets/scans/
 *.pdf
 !docs/**/*.pdf
+!datasets/real/**/*.pdf

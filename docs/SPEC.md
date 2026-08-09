@@ -43,14 +43,20 @@ Read that figure with two qualifications, both of which matter more than the fig
    human-corrected copy of the score than on the broken one. Two rules were disabled by default as
    a direct result (§4.3, §4.5), and the corpus was demoted from evidence to debugging aid.
 
-The real-material figures now tracked, on the one score in the evaluation set with a scan, an OMR
-output and a human correction (Schmitt, Sonatina op. 207 no. 2, mvt II):
+The real-material figures are now tracked in the repository and reproduced by
+`scripts/evaluate_real.py`, on the one score in the evaluation set that has a scan, an OMR output
+and a human correction (`datasets/real/schmitt-op207-2-ii/`):
 
 | | Found | Missed | False positives |
 |---|---|---|---|
 | Wrong pitches (1) | 0 | 1 | — |
-| Wrong spellings (15) | 13 | 2 | 1 |
-| On the human-corrected copy | — | — | 0 spelling |
+| Wrong spellings (15) | 13 | 2 | 1, verified against the scan |
+| Unattributed on the raw file | — | — | 5, not yet checked |
+| On the human-corrected copy | — | — | 10 total, 0 spelling |
+
+False positives there are judged against the **scan**, not against the editor's corrections. The
+distinction is not pedantic: the one standing false positive (m.22) is a note the editor also left
+alone, so scoring against the corrected file would have counted it as correct.
 
 Recall at 0.60 on the synthetic corpus is **40%**; see §7 for why that number is what it is, and
 why the missed real pitch error above is the argument for Phase 2 rather than for more rules.

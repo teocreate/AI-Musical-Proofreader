@@ -32,12 +32,6 @@ classifiers = [
     "Intended Audience :: Developers",
 ]
 
-[project.urls]
-Homepage = "https://github.com/teocreate/AI-Musical-Proofreader"
-Repository = "https://github.com/teocreate/AI-Musical-Proofreader"
-Issues = "https://github.com/teocreate/AI-Musical-Proofreader/issues"
-Documentation = "https://github.com/teocreate/AI-Musical-Proofreader/tree/main/docs"
-
 dependencies = [
     "pydantic>=2.7",
     "lxml>=5.0",
@@ -62,6 +56,12 @@ all = [
 
 [project.scripts]
 ai-proofreader = "ai_proofreader.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/teocreate/AI-Musical-Proofreader"
+Repository = "https://github.com/teocreate/AI-Musical-Proofreader"
+Issues = "https://github.com/teocreate/AI-Musical-Proofreader/issues"
+Documentation = "https://github.com/teocreate/AI-Musical-Proofreader/tree/main/docs"
 
 [tool.setuptools.packages.find]
 where = ["src"]

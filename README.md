@@ -134,21 +134,43 @@ its bar so the ground truth no longer lines up, but a 36-point gap is still a re
 not a rounding difference. Under both standards, landing on the right note with the wrong
 diagnosis counts as a miss.
 
-**On real material**, the picture is different again, and worse in a way worth stating plainly.
-Run against the Schmitt sonatina above, the musical channel found **0 of the 1 wrong pitch**. That
-error — a G5 read where the page prints F5 — leaves no musical trace whatsoever: only two notes
-sound at that moment, the interval is a third rather than a spike, and the figure never repeats
-identically. No amount of rule-writing finds it. It needs the scan, which is Phase 2, and this is
-the clearest evidence available that Phase 2 is not optional.
+**On real material** the picture is different, and worse in ways worth stating plainly. The scan,
+the raw OMR output, the human correction and the ground truth all ship in
+[`datasets/real/schmitt-op207-2-ii/`](datasets/real/schmitt-op207-2-ii/), so this is reproducible
+rather than assertable:
 
-What *did* work on that score is the rule the score itself suggested: enharmonic spelling, added
-afterwards, which finds **13 of the 15** misspellings with one false positive — verified note by
-note against the original scan, not against the human-corrected file. On the human-corrected copy
-of the same piece it reports nothing at all, which is the property that matters most.
+```bash
+python scripts/evaluate_real.py
+```
 
-The earlier version of this README claimed 85% precision from the synthetic corpus alone. That
-number was real and it did not survive contact with real music. It is left here as a marker: any
-proofreading tool that quotes you a precision figure without telling you what repertoire it was
+| | |
+|---|---|
+| Wrong spellings found | **13 of 15** |
+| Wrong pitches found | **0 of 1** |
+| False positives, judged against the scan | 1 (m.22) |
+| Suggestions still unattributed on the raw file | 5 |
+| Suggestions on the human-corrected copy | 10 (target: 0) |
+
+Four things in that table are worth more than the recall figure.
+
+**The one audible error was invisible.** A G5 read where the page prints F5, and it leaves no
+musical trace at all: only two notes sound at that moment, the interval is a third rather than a
+spike, and the figure never repeats identically. No amount of rule-writing finds it. It needs the
+page, which is Phase 2 — this is the clearest evidence in the project that Phase 2 is not
+optional.
+
+**False positives are judged against the scan, not against the human.** The m.22 suggestion looks
+right by every musical argument and the printed page says otherwise: the engraver really did write
+a sharp there. Measuring against the editor's corrections alone would have let that rule take
+credit for a note it got wrong.
+
+**Ten suggestions survive on the corrected copy**, five of them about slurs the editor was
+actively rewriting. Whether those are real findings or noise is not yet checked, and the number is
+printed rather than buried precisely so it cannot be quietly ignored.
+
+**The earlier version of this README claimed 85% precision** from the synthetic corpus alone. That
+number was real and did not survive contact with real music. It is left here as a marker: any
+proofreading tool that quotes a precision figure without telling you what repertoire it was
 measured on is quoting you a number about its own test fixtures.
 
 ## Status
@@ -287,6 +309,7 @@ docs/              architecture, spec, data model, roadmap
 scripts/           corpus generation, evaluation, calibration
 tests/             253 tests
 datasets/          the generated regression corpus
+  real/            scan + raw OMR output + human correction + ground truth
 ```
 
 ## Development
@@ -297,10 +320,13 @@ pytest -m slow               # the 100-page performance budget
 ruff check src tests scripts
 black src tests scripts
 
-python scripts/build_datasets.py                # regenerate the corpus
+python scripts/build_datasets.py                # regenerate the synthetic corpus
 python scripts/evaluate.py --min-precision 0.8  # the precision gate
+python scripts/evaluate_real.py                 # real OMR output, judged against the scan
 python scripts/calibrate.py                     # refit the confidence curve
 ```
+
+Both gates run in CI. The second one is the one that has actually changed decisions.
 
 Every threshold that decides whether a user sees a suggestion lives in `config.py`, not in a
 detector body — an operating point you cannot write down is one you cannot defend.
