@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+
+# Virtual environments. The glob is deliberately broad: corpus tooling needs OMR engines whose
+# dependencies conflict with the application's (homr pins opencv < 5), so they live in sibling
+# environments such as .venv-homr — several hundred megabytes of ONNX weights that must never
+# reach the repository.
+.venv*/
+venv/
+env/
+
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.DS_Store
+
+# Scan material whose licensing has not been established stays out. Evaluation cases that are
+# public domain and contributed deliberately are committed, scan included — the numbers in the
+# README are worth nothing if nobody else can reproduce them.
+datasets/scans/
+*.pdf
+!docs/**/*.pdf
+!datasets/real/**/*.pdf

@@ -1,0 +1,68 @@
+{
+  "$comment": "Ground truth for the first real evaluation case. See README.md in this directory for provenance and for what each `source` value means. Onsets are quarter-note positions within the measure, as strings, matching Suggestion.target.onset.",
+  "name": "schmitt-op207-2-ii",
+  "work": "Jacob Schmitt, Sonatina op. 207 no. 2, movement II",
+  "public_domain": true,
+  "engine": "MuseScore 4 (PDF import)",
+  "raw": "raw.musicxml",
+  "corrected": "corrected.musicxml",
+  "scan": "scan.pdf",
+  "counts": {
+    "notes_raw": 249,
+    "notes_corrected": 241,
+    "measures": 38
+  },
+  "errors": [
+    {
+      "kind": "pitch",
+      "part": "P1",
+      "measure": 6,
+      "staff": 1,
+      "onset": "0",
+      "was": "G5",
+      "should": "F5",
+      "source": "scan-verified",
+      "note": "The scan puts the notehead on the fifth line. The single sounding error in the file, and the one no musical rule can find: only two notes sound at that onset, G5 to E5 is a third rather than a spike, and the figure never repeats identically."
+    },
+    { "kind": "spelling", "part": "P1", "measure": 14, "staff": 1, "onset": "0", "was": "C#5", "should": "Db5", "source": "scan-verified" },
+    { "kind": "spelling", "part": "P1", "measure": 14, "staff": 2, "onset": "0", "was": "F#3", "should": "Gb3", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 14, "staff": 2, "onset": "1", "was": "F#3", "should": "Gb3", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 15, "staff": 2, "onset": "2", "was": "C#4", "should": "Db4", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 16, "staff": 2, "onset": "0", "was": "C#4", "should": "Db4", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 17, "staff": 2, "onset": "0", "was": "C#3", "should": "Db3", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 17, "staff": 2, "onset": "1", "was": "C#3", "should": "Db3", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 18, "staff": 1, "onset": "0", "was": "C#5", "should": "Db5", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 18, "staff": 1, "onset": "1", "was": "C#5", "should": "Db5", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 19, "staff": 2, "onset": "0", "was": "C#3", "should": "Db3", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 19, "staff": 2, "onset": "2", "was": "C#4", "should": "Db4", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 25, "staff": 2, "onset": "1", "was": "C#4", "should": "Db4", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 26, "staff": 1, "onset": "1", "was": "C#5", "should": "Db5", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 29, "staff": 1, "onset": "0", "was": "F#4", "should": "Gb4", "source": "human-correction" },
+    { "kind": "spelling", "part": "P1", "measure": 33, "staff": 1, "onset": "0", "was": "F#4", "should": "Gb4", "source": "human-correction" }
+  ],
+  "verified_correct": [
+    {
+      "part": "P1",
+      "measure": 12,
+      "staff": 1,
+      "onset": "0",
+      "pitch": "F#4",
+      "source": "scan-verified",
+      "note": "The scan prints a sharp. F#4 rises to G4 in the next beat, which is what a sharp does. Respelling it as Gb4 would be wrong, and an earlier revision of the spelling rule did exactly that."
+    },
+    {
+      "part": "P1",
+      "measure": 22,
+      "staff": 1,
+      "onset": "2",
+      "pitch": "F#4",
+      "source": "scan-verified",
+      "note": "The scan prints a sharp, in a diminished seventh (A-C-Eb-F#) that resolves to B-flat as though the note were a G-flat. The spelling rule's one standing false positive on this score, kept here so it is measured rather than forgotten."
+    }
+  ],
+  "unscored": {
+    "kind": "structure",
+    "measures": [4, 10, 12, 15, 16, 18, 23, 24, 25, 33, 37, 38],
+    "note": "Twenty-two slot-level differences between the two files, most of them the same pattern: a sustained note that belongs in its own voice was recognised as tied chord members of the voice above. Not scored, because the raw-to-corrected diff cannot separate genuine OMR errors from the editor's re-voicing choices without checking each one against the scan. No detector addresses this class today; writing one is issue #3 in CONTRIBUTING.md."
+  }
+}

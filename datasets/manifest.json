@@ -1,0 +1,737 @@
+{
+  "version": 1,
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "entries": [
+    {
+      "name": "chorale",
+      "role": "positive",
+      "clean": "clean/chorale.musicxml",
+      "corrupted": null,
+      "errors": []
+    },
+    {
+      "name": "chorale.s1",
+      "role": "positive",
+      "clean": "clean/chorale.musicxml",
+      "corrupted": "corrupted/chorale.s1.musicxml",
+      "errors": [
+        {
+          "kind": "halved_duration",
+          "part_id": "P2",
+          "measure_index": 1,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "half",
+          "after": "quarter",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 5,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "G4",
+          "after": "F#4",
+          "description": "notehead read 1 staff position(s) low"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P2",
+          "measure_index": 5,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "E4",
+          "after": "D4",
+          "description": "notehead read 1 staff position(s) low"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P3",
+          "measure_index": 0,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "D4",
+          "after": "D#4",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P2",
+          "measure_index": 4,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "G4",
+          "after": "G#4",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P4",
+          "measure_index": 4,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "D3",
+          "after": "B2",
+          "description": "notehead read 2 staff position(s) low"
+        }
+      ]
+    },
+    {
+      "name": "chorale.s2",
+      "role": "positive",
+      "clean": "clean/chorale.musicxml",
+      "corrupted": "corrupted/chorale.s2.musicxml",
+      "errors": [
+        {
+          "kind": "notehead_shift",
+          "part_id": "P4",
+          "measure_index": 4,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "G2",
+          "after": "A2",
+          "description": "notehead read 1 staff position(s) high"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 2,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "half",
+          "after": "quarter",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P4",
+          "measure_index": 0,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "A2",
+          "after": "A#2",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P2",
+          "measure_index": 2,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "half",
+          "after": "quarter",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P2",
+          "measure_index": 5,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "E4",
+          "after": "E#4",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P4",
+          "measure_index": 2,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "D3",
+          "after": "E3",
+          "description": "notehead read 1 staff position(s) high"
+        }
+      ]
+    },
+    {
+      "name": "chorale.s3",
+      "role": "positive",
+      "clean": "clean/chorale.musicxml",
+      "corrupted": "corrupted/chorale.s3.musicxml",
+      "errors": [
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P1",
+          "measure_index": 4,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "A4",
+          "after": "Ab4",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P3",
+          "measure_index": 5,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "B3",
+          "after": "C#4",
+          "description": "notehead read 1 staff position(s) high"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P3",
+          "measure_index": 4,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "D4",
+          "after": "D#4",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P4",
+          "measure_index": 2,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "D3",
+          "after": "Db3",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P2",
+          "measure_index": 4,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "F#4",
+          "after": "F4",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P2",
+          "measure_index": 3,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "A4",
+          "after": "C#5",
+          "description": "notehead read 2 staff position(s) high"
+        }
+      ]
+    },
+    {
+      "name": "piano",
+      "role": "positive",
+      "clean": "clean/piano.musicxml",
+      "corrupted": null,
+      "errors": []
+    },
+    {
+      "name": "piano.s1",
+      "role": "positive",
+      "clean": "clean/piano.musicxml",
+      "corrupted": "corrupted/piano.s1.musicxml",
+      "errors": [
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 1,
+          "onset": "2",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 13,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "E5",
+          "after": "C5",
+          "description": "notehead read 2 staff position(s) low"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 0,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 3,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 3,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "F#4",
+          "after": "D4",
+          "description": "notehead read 2 staff position(s) low"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 14,
+          "onset": "3",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 6,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 11,
+          "onset": "2",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        }
+      ]
+    },
+    {
+      "name": "piano.s2",
+      "role": "positive",
+      "clean": "clean/piano.musicxml",
+      "corrupted": "corrupted/piano.s2.musicxml",
+      "errors": [
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 0,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "D5",
+          "after": "C5",
+          "description": "notehead read 1 staff position(s) low"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 1,
+          "onset": "0",
+          "staff": 2,
+          "voice": "2",
+          "before": "C3",
+          "after": "A2",
+          "description": "notehead read 2 staff position(s) low"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 8,
+          "onset": "2",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 6,
+          "onset": "3",
+          "staff": 2,
+          "voice": "2",
+          "before": "D3",
+          "after": "E3",
+          "description": "notehead read 1 staff position(s) high"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 14,
+          "onset": "3",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 8,
+          "onset": "3",
+          "staff": 1,
+          "voice": "1",
+          "before": "B4",
+          "after": "A4",
+          "description": "notehead read 1 staff position(s) low"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 0,
+          "onset": "0",
+          "staff": 2,
+          "voice": "2",
+          "before": "G2",
+          "after": "B2",
+          "description": "notehead read 2 staff position(s) high"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 6,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "B4",
+          "after": "G4",
+          "description": "notehead read 2 staff position(s) low"
+        }
+      ]
+    },
+    {
+      "name": "piano.s3",
+      "role": "positive",
+      "clean": "clean/piano.musicxml",
+      "corrupted": "corrupted/piano.s3.musicxml",
+      "errors": [
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 0,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "eighth",
+          "after": "16th",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 5,
+          "onset": "3",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 10,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "G4",
+          "after": "B4",
+          "description": "notehead read 2 staff position(s) high"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 2,
+          "onset": "3",
+          "staff": 2,
+          "voice": "2",
+          "before": "D3",
+          "after": "F#3",
+          "description": "notehead read 2 staff position(s) high"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 2,
+          "onset": "1",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 9,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 5,
+          "onset": "2",
+          "staff": 2,
+          "voice": "2",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 6,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        }
+      ]
+    },
+    {
+      "name": "trio",
+      "role": "positive",
+      "clean": "clean/trio.musicxml",
+      "corrupted": null,
+      "errors": []
+    },
+    {
+      "name": "trio.s1",
+      "role": "positive",
+      "clean": "clean/trio.musicxml",
+      "corrupted": "corrupted/trio.s1.musicxml",
+      "errors": [
+        {
+          "kind": "missing_accidental",
+          "part_id": "P1",
+          "measure_index": 5,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "B4",
+          "after": "Bb4",
+          "description": "accidental glyph not recognized"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 6,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P2",
+          "measure_index": 7,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "whole",
+          "after": "half",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P2",
+          "measure_index": 2,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "B5",
+          "after": "B#5",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P1",
+          "measure_index": 2,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "A5",
+          "after": "Bb5",
+          "description": "notehead read 1 staff position(s) high"
+        }
+      ]
+    },
+    {
+      "name": "trio.s2",
+      "role": "positive",
+      "clean": "clean/trio.musicxml",
+      "corrupted": "corrupted/trio.s2.musicxml",
+      "errors": [
+        {
+          "kind": "notehead_shift",
+          "part_id": "P3",
+          "measure_index": 4,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "C3",
+          "after": "D3",
+          "description": "notehead read 1 staff position(s) high"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P2",
+          "measure_index": 4,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "half",
+          "after": "quarter",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P3",
+          "measure_index": 3,
+          "onset": "2",
+          "staff": 1,
+          "voice": "1",
+          "before": "C3",
+          "after": "Cb3",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "halved_duration",
+          "part_id": "P1",
+          "measure_index": 4,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "quarter",
+          "after": "eighth",
+          "description": "an extra flag was read on the stem"
+        },
+        {
+          "kind": "missing_accidental",
+          "part_id": "P1",
+          "measure_index": 5,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "B4",
+          "after": "Bb4",
+          "description": "accidental glyph not recognized"
+        }
+      ]
+    },
+    {
+      "name": "trio.s3",
+      "role": "positive",
+      "clean": "clean/trio.musicxml",
+      "corrupted": "corrupted/trio.s3.musicxml",
+      "errors": [
+        {
+          "kind": "missing_accidental",
+          "part_id": "P1",
+          "measure_index": 5,
+          "onset": "1",
+          "staff": 1,
+          "voice": "1",
+          "before": "B4",
+          "after": "Bb4",
+          "description": "accidental glyph not recognized"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P3",
+          "measure_index": 3,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "C3",
+          "after": "Cb3",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P1",
+          "measure_index": 0,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "F5",
+          "after": "F#5",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "spurious_accidental",
+          "part_id": "P2",
+          "measure_index": 4,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "A5",
+          "after": "A#5",
+          "description": "accidental recognized where none was printed"
+        },
+        {
+          "kind": "notehead_shift",
+          "part_id": "P3",
+          "measure_index": 7,
+          "onset": "0",
+          "staff": 1,
+          "voice": "1",
+          "before": "C3",
+          "after": "Bb2",
+          "description": "notehead read 1 staff position(s) low"
+        }
+      ]
+    },
+    {
+      "name": "chromatic",
+      "role": "negative-control",
+      "clean": "clean/chromatic.musicxml",
+      "corrupted": null,
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      # PySide6 links against these even under the offscreen plugin; the GitHub runner image
+      # does not ship them, and the failure looks like an import error rather than a missing .so.
+      - name: System libraries for Qt
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            libegl1 libgl1 libxkbcommon-x11-0 libdbus-1-3
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[ui,dev]"
+
+      - name: Lint
+        run: |
+          ruff check src tests scripts
+          black --check src tests scripts
+
+      # The UI tests drive real Qt widgets, which need a platform plugin even when nothing is
+      # shown. Qt's own offscreen plugin covers it, so no X server is needed.
+      - name: Test
+        run: pytest -q
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+  precision-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      # The product promise is precision, so it is a build failure, not a metric on a dashboard.
+      - name: Rebuild the corpus and enforce the precision floor
+        run: |
+          python scripts/build_datasets.py
+          python scripts/evaluate.py --min-precision 0.8 --gate-threshold 0.6
+
+      # Real OMR output, judged against the scan. The limit is the count that exists today, so a
+      # change that adds a false positive on real music fails here rather than in someone's score.
+      - name: Real-material regression
+        run: python scripts/evaluate_real.py --max-false-positives 1

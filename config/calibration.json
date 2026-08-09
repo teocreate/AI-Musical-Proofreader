@@ -1,0 +1,28 @@
+{
+  "analysis": {
+    "key_window_measures": 4,
+    "min_confidence": 0.35,
+    "max_suggestions": 1000,
+    "motif_min_length": 4,
+    "motif_min_occurrences": 3,
+    "motif_max_deviations": 1,
+    "parallel": true,
+    "parallel_threshold_notes": 4000,
+    "detectors": {}
+  },
+  "fusion": {
+    "musical_weight": 1.0,
+    "pattern_weight": 1.1,
+    "visual_weight": 1.4,
+    "ai_weight": 1.2,
+    "disagreement_penalty": 0.45,
+    "calibration_slope": 16.0,
+    "calibration_midpoint": 0.54,
+    "musical_only_ceiling": 0.85
+  },
+  "ui": {
+    "review_threshold": 0.5,
+    "staff_space_pixels": 8.0,
+    "dark_mode": true
+  }
+}
