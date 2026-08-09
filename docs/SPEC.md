@@ -17,14 +17,43 @@ The product promise is that a suggestion is worth reading. Concretely:
 | Property | Requirement | Enforced by |
 |---|---|---|
 | Precision at the review threshold | ≥ 80% at 0.60 confidence | `scripts/evaluate.py --min-precision 0.8 --gate-threshold 0.6` |
-| False positives on correct music | ≤ 1 per corpus entry, none above 0.70 | `tests/test_pipeline.py::TestCorpus` |
+| False positives on correct music | **zero** per corpus entry | `tests/test_pipeline.py::TestCorpus` |
 | Explanation | Every suggestion states its reasoning in one paragraph a musician can check | Review, plus `test_text_report_mentions_every_suggestion` |
 | Non-destruction | No file on disk changes without an explicit accept and an explicit export | `test_accepting_does_not_touch_the_file`, `test_apply_defaults_to_changing_nothing` |
 | Reversibility | Every applied edit is exactly undoable | `tests/test_edits.py::TestUndo` |
 
-Measured on the shipped corpus at the time of writing: **85.2% precision at the 0.60 threshold,
-100% at 0.80**, one false positive across 290 notes of clean music. Recall at 0.60 is **40%** —
-see §7 for why that number is what it is and what raises it.
+### What the numbers actually say
+
+Measured on the shipped **synthetic** corpus (1019 notes, 57 injected errors), at the 0.60
+threshold: 25 reported, 23 correct, **92% precision** and **40% recall**, with nothing at all
+reported on the four clean entries.
+
+Read that figure with two qualifications, both of which matter more than the figure:
+
+1. **It uses measure-level matching** — right part, right bar, diagnosis consistent with the
+   error. Under exact-onset matching, precision at the same threshold is **56%**. That standard is
+   systematically pessimistic (injecting a duration error shifts every later onset in its bar, so
+   ground truth recorded against the clean score no longer lines up), which is why the gate uses
+   the measure standard — but a 36-point gap is a real weakness, not a rounding difference.
+2. **The corpus is synthetic, and synthetic corpora flatter their authors.** Errors are injected
+   by the same repository that detects them, into music written by the same repository. An earlier
+   revision of this document quoted 85.2% precision from that corpus as though it characterised
+   the product; on the first real OMR output the project ever saw, the same configuration returned
+   nineteen suggestions of which **zero** were correct, and produced *more* suggestions on the
+   human-corrected copy of the score than on the broken one. Two rules were disabled by default as
+   a direct result (§4.3, §4.5), and the corpus was demoted from evidence to debugging aid.
+
+The real-material figures now tracked, on the one score in the evaluation set with a scan, an OMR
+output and a human correction (Schmitt, Sonatina op. 207 no. 2, mvt II):
+
+| | Found | Missed | False positives |
+|---|---|---|---|
+| Wrong pitches (1) | 0 | 1 | — |
+| Wrong spellings (15) | 13 | 2 | 1 |
+| On the human-corrected copy | — | — | 0 spelling |
+
+Recall at 0.60 on the synthetic corpus is **40%**; see §7 for why that number is what it is, and
+why the missed real pitch error above is the argument for Phase 2 rather than for more rules.
 
 ## 3. Inputs and outputs
 
@@ -59,9 +88,14 @@ checks.
 
 ## 5. Detection rules
 
-Fourteen detectors, each independently enableable and weightable through `config.json`. Listed in
+Fifteen detectors, each independently enableable and weightable through `config.json`. Listed in
 registry order — structural first, since a wrong clef invalidates every note-level finding under
 it.
+
+Two of them are **off by default**. That is a status, not a bug: they are sound in principle and
+false in practice on ordinary tonal repertoire, so they keep their code and their tests and lose
+their default. Naming a detector in the config switches it on, even with an empty entry:
+`{"analysis": {"detectors": {"contour_spike": {}}}}`.
 
 | Detector | Finds | Typical confidence | Notes |
 |---|---|---|---|
@@ -73,12 +107,36 @@ it.
 | `slur_structure` | Slurs that open or close alone | low | Often a system break, not an error |
 | `voice_overlap` | Two notes at once in one voice | high | Chord split, or a `<backup>` overlap |
 | `accidental_consistency` | Sounding pitch contradicting the bar's own accidentals | high | Pure internal consistency; no page needed |
+| `enharmonic_spelling` | A note whose sound is right and whose letter is wrong | **high** | The only rule with a real-score measurement; see §6.2 |
 | `motif_deviation` | A repeated figure differing at one note | **high** | The flagship rule; see §6 |
-| `contour_spike` | A note that leaps away and straight back | medium | The weakest rule; gated hardest |
+| `contour_spike` | A note that leaps away and straight back | medium | **Off by default** — 3 false positives, 0 true, on real material |
 | `harmonic_outlier` | A note a semitone or a step from a real chord | medium | Cross-part; works in sounding pitch |
 | `carried_accidental` | Long-range carry-over where the key says natural | low | Honest about needing the scan |
-| `chromatic_outlier` | A lone foreign pitch in a clearly diatonic passage | low–medium | Silent when the local key is unclear |
+| `chromatic_outlier` | A lone foreign pitch in a clearly diatonic passage | low–medium | **Off by default** — 11 false positives, 0 true, on real material |
 | `voice_crossing` | A single crossing in otherwise ordered writing | medium | |
+
+### 5.1 Why two rules are switched off
+
+Both fired confidently on the synthetic corpus and both were wrong on the first real score, for
+the same underlying reason: they assume a kind of music that the corpus contained and that most
+repertoire does not.
+
+`chromatic_outlier` assumes that a non-diatonic note in a clearly established key is suspicious.
+The Schmitt sonatina is written in F major and is full of chromatic passing tones and secondary
+dominants, which is completely normal for its period. The key estimator, correctly, reports F
+major with high confidence, so every chromatic note reads as a lone foreigner: eleven suggestions,
+all wrong. The synthetic chromatic étude did not catch this because a *fully* chromatic piece
+makes the key estimate unreliable and silences the rule. The dangerous case is the middle one —
+tonal music with ordinary chromaticism, which is most music.
+
+`contour_spike` assumes composers write smooth lines and OMR breaks them. Real keyboard writing is
+full of deliberate leaps that are smooth in voice-leading terms and rough to an interval-by-
+interval measure. It produced three suggestions, all wrong, and missed the one genuine misread
+pitch — which was a third, not a spike, and left no roughness to detect.
+
+Neither is deleted. `chromatic_outlier` is right for strictly diatonic repertoire — hymnody, folk
+transcription, early counterpoint — and the user who knows that about their material can say so in
+one line of config.
 
 ### Rules deliberately *not* implemented
 
@@ -115,6 +173,38 @@ honest:
    likely to be a compositional variant than a misread notehead.
 
 Complexity O(n·L); the index is built once per run and shared.
+
+### 6.2 Enharmonic spelling
+
+The rule the first real score produced, and the only one in the catalogue with a measurement
+against an actual scan rather than against injected errors.
+
+The error class it addresses is invisible to every other rule, because nothing about it is wrong
+acoustically: the engine hears the right sound and writes the wrong letter. C-sharp where the page
+says D-flat sounds identical on playback and is unambiguously wrong to a reader. Fifteen of the
+seventeen errors in the reference score were of this kind.
+
+Three signals decide it, in strength order:
+
+1. **Resolution.** An altered note rising a semitone is spelled sharp; one falling a semitone is
+   spelled flat. Agreement is a *veto* — a rising sharp is correct however far the key sits — and
+   disagreement is the strongest available evidence, so it earns the lowest threshold.
+2. **Distance from the key** on the circle of fifths, where position = `step_fifths + 7 × alter`.
+   In F major (−1), D-flat sits 4 steps away and C-sharp sits 8.
+3. **The vertical spelling.** Notes engraved together lie in a compact window of the line of
+   fifths — G-flat/B-flat/D-flat spans four, the same sound written F-sharp/B-flat/D-flat spans
+   eleven. A respelling that pulls a wide chord together is corroboration from the harmony rather
+   than from the key.
+
+Signal 2 is asymmetric and must be handled explicitly: the seven natural letters occupy positions
+−1 to 5, so a sharp *always* measures further from the key number than its flat twin, in every
+key. Read literally the measure would flatten every sharp in C major. It is therefore only allowed
+to propose accidentals of the kind the key already uses — flats in flat keys, sharps in sharp
+keys, nothing at all in C major without corroboration from signal 1 or 3.
+
+Measured against the reference scan: 13 of 15 found, one false positive (m.22, where the engraver
+really did print a sharp in a diminished seventh that resolves like a flat), and **nothing** on
+the human-corrected copy of the same piece.
 
 ## 7. Confidence
 

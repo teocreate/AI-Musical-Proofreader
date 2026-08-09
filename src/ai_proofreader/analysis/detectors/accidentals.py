@@ -232,12 +232,29 @@ class CarriedAccidentalDetector(Detector):
 
 
 class ChromaticOutlierDetector(Detector):
-    """A lone foreign pitch in a passage that is otherwise firmly in one key."""
+    """A lone foreign pitch in a passage that is otherwise firmly in one key.
+
+    **Off by default.** This rule was convincing on the synthetic corpus and false on the first
+    real score it met. The failure is instructive enough to be worth recording here: the Schmitt
+    sonatina is written in F major and is *full* of chromatic passing tones and secondary
+    dominants, which is completely normal for the period. The key estimator, correctly, reports
+    F major with high confidence — so every chromatic note in the piece looks like a lone
+    foreigner in a clear key, and the rule fired eleven times, all wrong.
+
+    The synthetic chromatic étude did not catch this, because a *fully* chromatic piece makes the
+    key estimate unreliable and the rule silences itself. The dangerous case is the middle one:
+    tonal music with ordinary chromaticism, which is most music. Isolation from the key is not
+    evidence of a recognition error; it is evidence of nineteenth-century harmony.
+
+    Enable it with ``{"detectors": {"chromatic_outlier": {}}}`` for repertoire that really is
+    strictly diatonic — hymnody, folk transcription, early counterpoint — where the premise holds.
+    """
 
     name = "chromatic_outlier"
     description = "Isolated non-diatonic notes in a clearly established key"
     kinds = (SuggestionKind.ACCIDENTAL_REMOVE, SuggestionKind.ACCIDENTAL_CHANGE)
     channel = Channel.MUSICAL
+    enabled_by_default = False
     defaults = {
         "score": 0.5,
         #: Measures either side of the note used to judge isolation.

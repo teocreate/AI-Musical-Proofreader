@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from ai_proofreader.cli import main
-from ai_proofreader.config import AnalysisConfig, ProofreaderConfig
+from ai_proofreader.config import AnalysisConfig, DetectorConfig, ProofreaderConfig
 from ai_proofreader.edits import EditApplier
 from ai_proofreader.models import SuggestionKind
 from ai_proofreader.pipeline import Proofreader, render_html, render_json, render_text
@@ -70,8 +70,26 @@ class TestAnalysis:
         assert found.suggested_repr == "F#5"
         assert found.confidence.percent >= 70
         assert found.is_actionable
-        # Several independent rules should have reached the same conclusion.
-        assert len(found.evidence) >= 2
+
+    def test_an_opt_in_rule_adds_a_second_opinion(self, score_file) -> None:  # type: ignore[no-untyped-def]
+        """Naming an off-by-default detector switches it on and its evidence joins the finding.
+
+        This is the whole point of the default-off mechanism: ``chromatic_outlier`` is wrong on
+        ordinary tonal repertoire, but on strictly diatonic material it corroborates the pattern
+        rule, and the user who knows that about their music can say so in one config line.
+        """
+        broken = "D5:1/2 E5:1/2 F5:1 E5:1 D5:1"
+        path = score_file(motif_score(broken))
+        assert len(Proofreader().analyze_file(path).report.suggestions[0].evidence) == 1
+
+        opted_in = ProofreaderConfig(
+            analysis=AnalysisConfig(detectors={"chromatic_outlier": DetectorConfig()})
+        )
+        found = Proofreader(opted_in).analyze_file(path).report.suggestions[0]
+        assert {item.detector for item in found.evidence} == {
+            "motif_deviation",
+            "chromatic_outlier",
+        }
 
     def test_report_carries_timings_and_counts(self, score_file) -> None:  # type: ignore[no-untyped-def]
         result = Proofreader().analyze_file(score_file(motif_score("D5:4")))
@@ -223,13 +241,17 @@ class TestCommandLine:
 
 class TestCorpus:
     @pytest.mark.parametrize("name", corpus_names())
-    def test_clean_entries_are_almost_silent(self, name: str, score_file) -> None:  # type: ignore[no-untyped-def]
-        """The precision contract, enforced. Clean music must produce essentially nothing; the
-        allowance is one low-confidence finding per entry, and none at the review threshold."""
+    def test_clean_entries_are_silent(self, name: str, score_file) -> None:  # type: ignore[no-untyped-def]
+        """The precision contract, enforced: correct music produces nothing at all.
+
+        This used to allow one finding per entry. It no longer needs to — retiring the two rules
+        that fired on ordinary chromaticism took the corpus to zero — and the allowance is worth
+        giving up, because it was the slot a new rule's first false positive would quietly fill.
+        """
         result = Proofreader().analyze_file(
             score_file(build_corpus_score(name), f"{name}.musicxml")
         )
-        assert len(result.report.suggestions) <= 1
+        assert result.report.suggestions == ()
         assert result.report.above(0.7) == ()
 
     def test_injected_errors_are_found(self, score_file, tmp_path: Path) -> None:  # type: ignore[no-untyped-def]

@@ -35,12 +35,22 @@ class ContourSpikeDetector(Detector):
     leaves the same trace: two awkward intervals where there were none, repaired by moving that
     one note back. The rule requires the note to be rough *relative to its own phrase*, not
     against an absolute threshold — a Webern line and a Mozart line have very different baselines.
+
+    **Off by default.** On the first real score in the corpus it produced three suggestions, all
+    wrong, and missed the one genuine misread pitch — which was a third, not a spike, and so left
+    no roughness to detect. The premise is that composers write smooth lines and OMR breaks them;
+    real keyboard writing is full of deliberate leaps that are smooth in *voice-leading* terms
+    while looking rough to an interval-by-interval measure. Until the rule reasons about the
+    implied voices rather than the printed sequence, it costs more than it returns.
+
+    Enable it with ``{"detectors": {"contour_spike": {}}}``.
     """
 
     name = "contour_spike"
     description = "Notes that break an otherwise smooth melodic line and are fixed by one step"
     kinds = (SuggestionKind.PITCH,)
     channel = Channel.MUSICAL
+    enabled_by_default = False
     defaults = {
         "score": 0.58,
         #: Minimum fraction of the local roughness that the repair must remove.

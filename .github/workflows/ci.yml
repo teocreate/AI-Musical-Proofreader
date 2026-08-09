@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[ui,dev]"
+
+      - name: Lint
+        run: |
+          ruff check src tests scripts
+          black --check src tests scripts
+
+      # The UI tests drive real Qt widgets, which need a display even when nothing is shown.
+      - name: Test
+        run: xvfb-run -a pytest -q
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+  precision-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      # The product promise is precision, so it is a build failure, not a metric on a dashboard.
+      - name: Rebuild the corpus and enforce the precision floor
+        run: |
+          python scripts/build_datasets.py
+          python scripts/evaluate.py --min-precision 0.8 --gate-threshold 0.6

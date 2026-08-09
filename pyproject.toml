@@ -8,14 +8,35 @@ version = "0.1.0"
 description = "Intelligent post-OMR correction system for MuseScore Studio scores"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "Proprietary" }
-authors = [{ name = "AI Musical Proofreader" }]
-keywords = ["music", "omr", "musicxml", "musescore", "proofreading"]
-classifiers = [
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Multimedia :: Sound/Audio :: Analysis",
-    "Intended Audience :: End Users/Desktop",
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "AI Musical Proofreader contributors" }]
+keywords = [
+    "music",
+    "omr",
+    "optical-music-recognition",
+    "musicxml",
+    "musescore",
+    "sheet-music",
+    "music-notation",
+    "proofreading",
+    "music-theory",
+    "score-analysis",
 ]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+]
+
+[project.urls]
+Homepage = "https://github.com/teocreate/AI-Musical-Proofreader"
+Repository = "https://github.com/teocreate/AI-Musical-Proofreader"
+Issues = "https://github.com/teocreate/AI-Musical-Proofreader/issues"
+Documentation = "https://github.com/teocreate/AI-Musical-Proofreader/tree/main/docs"
 
 dependencies = [
     "pydantic>=2.7",

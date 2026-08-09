@@ -13,6 +13,7 @@ from .accidentals import (
 from .motifs import MotifDeviationDetector
 from .pitch import ContourSpikeDetector, HarmonicOutlierDetector
 from .rhythm import MeasureDurationDetector, TupletDetector
+from .spelling import EnharmonicSpellingDetector
 from .structure import ClefPlausibilityDetector, KeySignatureConsistencyDetector
 from .ties import SlurStructureDetector, TieIntegrityDetector
 from .voices import VoiceCrossingDetector, VoiceOverlapDetector
@@ -23,6 +24,7 @@ __all__ = [
     "ChromaticOutlierDetector",
     "ClefPlausibilityDetector",
     "ContourSpikeDetector",
+    "EnharmonicSpellingDetector",
     "HarmonicOutlierDetector",
     "KeySignatureConsistencyDetector",
     "MeasureDurationDetector",

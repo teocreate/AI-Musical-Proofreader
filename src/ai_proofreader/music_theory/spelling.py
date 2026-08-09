@@ -24,10 +24,25 @@ from ..models import ACCIDENTAL_ALTER, ALTER_ACCIDENTAL, Accidental, KeySignatur
 __all__ = [
     "AccidentalState",
     "accidental_for_change",
+    "circle_of_fifths_position",
+    "enharmonic_spellings",
     "expected_alter",
+    "nearest_spelling",
     "requires_printed_accidental",
     "spell_pitch_class",
+    "spelling_distance",
 ]
+
+#: Position of each natural letter on the circle of fifths, with C at the origin.
+_STEP_FIFTHS: dict[Step, int] = {
+    Step.F: -1,
+    Step.C: 0,
+    Step.G: 1,
+    Step.D: 2,
+    Step.A: 3,
+    Step.E: 4,
+    Step.B: 5,
+}
 
 
 @dataclass
@@ -110,3 +125,58 @@ def spell_pitch_class(
     if prefer_sharp:
         return Pitch(step=naturals[(target - 1) % 12], alter=1, octave=4)
     return Pitch(step=naturals[(target + 1) % 12], alter=-1, octave=4)
+
+
+# -- enharmonic spelling -----------------------------------------------------------
+#
+# A separate failure mode from everything above, and one the first real score in the corpus
+# showed to be the *most common* of all: the engine hears the right sound and writes the wrong
+# letter. C-sharp where the music says D-flat sounds identical and is unambiguously wrong — a
+# G-flat major triad spelled F-sharp/B-flat/D-flat is not a chord anyone would engrave.
+#
+# The measure that separates them is position on the circle of fifths. Every key sits somewhere
+# on that circle, and so does every spelled pitch; a spelling far from the key when its
+# enharmonic twin is close is a spelling the engraver did not use.
+
+
+def circle_of_fifths_position(pitch: Pitch) -> int:
+    """Where a *spelled* pitch sits on the circle of fifths, with C at zero.
+
+    Each accidental moves seven steps: C=0, C-sharp=7, D-flat=-5. The distance between a note
+    and its key is therefore a direct measure of how exotic the spelling is.
+    """
+    return _STEP_FIFTHS[pitch.step] + 7 * pitch.alter
+
+
+def spelling_distance(pitch: Pitch, key: KeySignature) -> int:
+    """How far a spelling sits from its key signature on the circle of fifths."""
+    return abs(circle_of_fifths_position(pitch) - key.fifths)
+
+
+def enharmonic_spellings(pitch: Pitch, max_alter: int = 2) -> list[Pitch]:
+    """Every other way of writing the same sound, within ``max_alter`` accidentals."""
+    results: list[Pitch] = []
+    for offset in (-2, -1, 1, 2):
+        candidate = pitch.step_shifted(offset, alter=0)
+        alter = pitch.midi - candidate.midi
+        if abs(alter) > max_alter:
+            continue
+        spelled = candidate.with_alter(alter)
+        if spelled.midi == pitch.midi and spelled.step is not pitch.step:
+            results.append(spelled)
+    return results
+
+
+def nearest_spelling(pitch: Pitch, key: KeySignature) -> Pitch:
+    """The spelling of this sound that sits closest to ``key`` on the circle of fifths.
+
+    Returns ``pitch`` unchanged when it is already the closest, which is the common case and the
+    reason this is cheap to call on every note.
+    """
+    best = pitch
+    best_distance = spelling_distance(pitch, key)
+    for candidate in enharmonic_spellings(pitch):
+        distance = spelling_distance(candidate, key)
+        if distance < best_distance:
+            best, best_distance = candidate, distance
+    return best

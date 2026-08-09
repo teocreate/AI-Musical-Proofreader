@@ -117,6 +117,11 @@ class Detector(ABC):
     #: True when the rule needs every part at once (vertical harmony, cross-part agreement).
     #: Part-local rules can be sharded across processes; cross-part rules cannot.
     cross_part: ClassVar[bool] = False
+    #: False for rules that are sound in principle but did not earn their place on real
+    #: material. They stay in the tree, keep their tests, and are one config line away — but a
+    #: user who installs the tool does not pay for them. A rule that fires on correct music is
+    #: worse than no rule: it teaches the user to ignore the panel.
+    enabled_by_default: ClassVar[bool] = True
 
     def __init__(self, config: DetectorConfig | None = None) -> None:
         self.config = config or DetectorConfig()

@@ -17,6 +17,7 @@ from ai_proofreader.analysis.detectors import (
     ChromaticOutlierDetector,
     ClefPlausibilityDetector,
     ContourSpikeDetector,
+    EnharmonicSpellingDetector,
     HarmonicOutlierDetector,
     KeySignatureConsistencyDetector,
     MeasureDurationDetector,
@@ -350,9 +351,78 @@ class TestContourSpike:
         assert any(item.kind is SuggestionKind.PITCH for item in found)
 
 
+class TestEnharmonicSpelling:
+    """The rule that came out of the first real score, and the traps that shaped it.
+
+    Every negative here is a case the detector *did* get wrong at some point in its development,
+    kept so it cannot get them wrong again.
+    """
+
+    def test_a_sharp_in_a_flat_key_that_falls_is_a_flat(self, context) -> None:  # type: ignore[no-untyped-def]
+        """The Schmitt case: C-sharp descending to C, in F major, is a D-flat."""
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("D4:1 C#4:1 C4:1 Bb3:1", key_fifths=-1)),
+        )
+        assert [(item.current_repr, item.suggested_repr) for item in found] == [("C#4", "Db4")]
+
+    def test_a_sharp_that_rises_is_left_alone(self, context) -> None:  # type: ignore[no-untyped-def]
+        """A leading tone is spelled sharp however far the key sits. This veto outranks all."""
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("C4:1 C#4:1 D4:1 F4:1", key_fifths=-1)),
+        )
+        assert found == []
+
+    def test_a_flat_that_falls_is_left_alone(self, context) -> None:  # type: ignore[no-untyped-def]
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("G5:1 Gb5:1 F5:1 E5:1", key_fifths=3)),
+        )
+        assert found == []
+
+    def test_sharps_in_a_sharp_key_are_left_alone(self, context) -> None:  # type: ignore[no-untyped-def]
+        """The measure is asymmetric; without this guard it flattens music that is fine."""
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("B4:1 A#4:1 F#4:1 D#4:1", key_fifths=3)),
+        )
+        assert found == []
+
+    def test_c_major_says_nothing_on_its_own(self, context) -> None:  # type: ignore[no-untyped-def]
+        """An augmented triad in C major is spelled with a sharp fifth by every engraver.
+
+        With no key signature there is no flat-or-sharp evidence in the key at all, so distance
+        alone must not be allowed to speak — this is the false positive the chromatic corpus
+        entry caught.
+        """
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("C4:1 E4:1 G#4:1 B4:1", key_fifths=0)),
+        )
+        assert found == []
+
+    def test_naturals_are_never_proposed_for_respelling(self, context) -> None:  # type: ignore[no-untyped-def]
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("C4:1 D4:1 E4:1 F4:1", key_fifths=-3)),
+        )
+        assert found == []
+
+    def test_the_edit_prints_the_new_accidental(self, context) -> None:  # type: ignore[no-untyped-def]
+        """A respelled note needs its own accidental: the old letter's carry-over does not apply."""
+        found = run(
+            EnharmonicSpellingDetector(),
+            context(single_part("D4:1 C#4:1 C4:1 Bb3:1", key_fifths=-1)),
+        )
+        edit = found[0].edits[0]
+        assert (edit.step.value, edit.alter, edit.set_accidental) == ("D", -1, True)
+
+
 @pytest.mark.parametrize(
     "detector_type",
     [
+        EnharmonicSpellingDetector,
         MeasureDurationDetector,
         TieIntegrityDetector,
         SlurStructureDetector,

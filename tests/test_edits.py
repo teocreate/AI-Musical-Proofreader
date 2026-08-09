@@ -66,7 +66,14 @@ class TestPitchEdits:
         names = [n.pitch.name for n in reparsed.parts[0].measures[0].iter_notes()]
         assert names == ["D4", "D4", "E4", "F4"]
         # A one-note change must be a small diff, not a re-engraving.
-        assert sum(1 for a, b in zip(before.split("<note>"), after.split("<note>"), strict=False) if a != b) <= 2
+        assert (
+            sum(
+                1
+                for a, b in zip(before.split("<note>"), after.split("<note>"), strict=False)
+                if a != b
+            )
+            <= 2
+        )
 
     def test_adding_an_accidental_lands_in_schema_order(self, loaded) -> None:  # type: ignore[no-untyped-def]
         """Appending <accidental> after <notations> produces a file MuseScore silently mangles."""
