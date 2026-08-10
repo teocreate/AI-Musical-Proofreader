@@ -27,6 +27,19 @@ music, and it disagreed with the synthetic corpus on nearly every point that mat
   default; `docs/SPEC.md` §5.1 explains why.
 * **The one audible error was invisible to every rule.** See the `note` field on it in
   `ground_truth.json`. It is the clearest argument in the project for building the vision channel.
+* **Most of the work was not about notes at all.** MuseScore's PDF import carried over **zero
+  slurs and zero pedal marks** from a page covered in both, plus no dynamics, wedges or fermatas.
+  The editor added 104 markings by hand against 17 note-level errors. Nothing in the rule set
+  addresses any of it, and nothing can: a file with no slurs is perfectly self-consistent, so
+  there is no internal contradiction to detect. See the `markup` block in `ground_truth.json`.
+
+## Read this before using the markup as truth
+
+The editor verified markup against the scan for **measures 1-16 only**. Slurs do exist beyond
+that point in the corrected file and they are not invented — counting arcs on the scan for
+system 3 gives roughly seven against nine in the file — but they are unchecked. Use mm.1-16 as
+ground truth for slurs and pedal; treat mm.17-38 as neither evidence of a marking nor evidence of
+its absence. Note-level ground truth is unaffected and covers the whole movement.
 
 ## Provenance of each entry
 

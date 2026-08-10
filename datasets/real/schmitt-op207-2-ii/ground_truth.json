@@ -60,6 +60,33 @@
       "note": "The scan prints a sharp, in a diminished seventh (A-C-Eb-F#) that resolves to B-flat as though the note were a G-flat. The spelling rule's one standing false positive on this score, kept here so it is measured rather than forgotten."
     }
   ],
+  "markup": {
+    "$comment": "The largest class of correction in this file, and the one the tool is worst at. Read the caveat before using any of it as truth.",
+    "raw_counts": {
+      "slurs": 0,
+      "pedal_marks": 0,
+      "dynamics": 0,
+      "wedges": 0,
+      "fermatas": 0,
+      "fingerings": 0,
+      "staccato": 21
+    },
+    "corrected_counts": {
+      "slurs": 50,
+      "pedal_marks": 34,
+      "dynamics": 5,
+      "wedges": 4,
+      "fermatas": 2,
+      "fingerings": 9,
+      "staccato": 21
+    },
+    "note": "MuseScore's PDF import carried over no slurs and no pedal at all, though the page is covered in both. 104 markings were added by hand against 17 note-level errors — the markup class is roughly six times the work, and no detector addresses any of it. A missing slur leaves no trace in the music: a file with zero slurs is perfectly self-consistent, so no amount of musical reasoning can find one. This is a vision-channel problem end to end.",
+    "trustworthy_range": {
+      "measures": "1-16",
+      "why": "The editor verified the markup against the scan for the first sixteen bars only. Slurs do exist in the file beyond m.16 — 22 of them — and spot-counting arcs on the scan for system 3 (mm.16-22) gives roughly seven against nine in the file, so they are not invented. They are simply not checked. Use mm.1-16 as ground truth for markup; treat mm.17-38 as neither evidence of a slur nor evidence of its absence."
+    },
+    "pattern_detector_will_not_help": "An obvious cheap idea is to flag a repeated figure that is slurred in one occurrence and not in another, by analogy with motif_deviation. It cannot work on this material: the raw file has zero slurs, so there is no partial evidence to reason from. The same applies to pedal. Confirmed on this score before writing any code."
+  },
   "unscored": {
     "kind": "structure",
     "measures": [4, 10, 12, 15, 16, 18, 23, 24, 25, 33, 37, 38],
